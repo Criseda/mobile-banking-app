@@ -1,0 +1,54 @@
+version: v0.13.0
+
+dsn: mysql://root:secret@kratos-db:3306/kratos?parseTime=true&multiStatements=true
+
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://localhost:8081 # For React Native Metro bundler
+  admin:
+    base_url: http://kratos:4434/
+
+# This section was missing required keys.
+selfservice:
+  default_browser_return_url: http://127.0.0.1:4433/
+
+  flows:
+    error:
+      ui_url: http://localhost:4433/error
+
+    login:
+      ui_url: http://localhost:4433/login
+      lifespan: 10m
+
+    registration:
+      ui_url: http://localhost:4433/registration
+      lifespan: 10m
+      after:
+        password:
+          hooks:
+            - hook: session
+
+    recovery:
+      ui_url: http://localhost:4433/recovery
+      enabled: true
+
+    verification:
+      ui_url: http://localhost:4433/verification
+      enabled: true
+      after:
+        default_browser_return_url: http://127.0.0.1:4433/
+
+# We add a courier section with a placeholder URI to satisfy the config schema.
+# This URI does not need to point to a real SMTP server for now.
+courier:
+  smtp:
+    connection_uri: smtp://test:test@127.0.0.1:2500/?disable_starttls=true
+
+identity:
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json

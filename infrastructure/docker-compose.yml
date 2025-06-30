@@ -1,0 +1,78 @@
+services:
+  app-db:
+    image: mariadb:10.11
+    container_name: mobile_banking_app_db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: banking_app
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - app_db_data:/var/lib/mysql
+    networks:
+      - backend-net
+    restart: unless-stopped
+
+  kratos-db:
+    image: mariadb:10.11
+    container_name: mobile_banking_kratos_db
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: kratos
+    volumes:
+      - kratos_db_data:/var/lib/mysql
+    networks:
+      - backend-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - '--sql_mode=NO_ENGINE_SUBSTITUTION'
+
+  kratos-migrate:
+    image: oryd/kratos:v1.1.0
+    container_name: mobile_banking_kratos_migrate
+    environment:
+      # THE ONE TRUE DSN FORMAT
+      - DSN=mysql://root:secret@tcp(kratos-db:3306)/kratos?parseTime=true&multiStatements=true
+    volumes:
+      - ./ory/kratos:/etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+    networks:
+      - backend-net
+    restart: on-failure
+    depends_on:
+      kratos-db:
+        condition: service_healthy
+
+  kratos:
+    image: oryd/kratos:v1.1.0
+    container_name: mobile_banking_kratos
+    ports:
+      - "4433:4433" # Public API
+      - "4434:4434" # Admin API
+    environment:
+      # THE ONE TRUE DSN FORMAT
+      - DSN=mysql://root:secret@tcp(kratos-db:3306)/kratos?parseTime=true&multiStatements=true
+      - LOG_LEVEL=debug
+    command: serve -c /etc/config/kratos/kratos.yml --dev
+    volumes:
+      - ./ory/kratos:/etc/config/kratos
+    networks:
+      - backend-net
+    restart: unless-stopped
+    depends_on:
+      - kratos-migrate
+
+networks:
+  backend-net:
+    driver: bridge
+
+volumes:
+  app_db_data:
+  kratos_db_data:
