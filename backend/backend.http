@@ -1,0 +1,12 @@
+# Note: This file uses the VS Code REST Client extension.
+# The 'dotnet run' command outputs both an HTTP and an HTTPS address.
+# We should always prefer the HTTPS one. Please check your terminal
+# for the correct port number and update it below if necessary.
+@backend_HostAddress = https://localhost:7281
+
+###
+
+# @name getHealthCheck
+# This request calls our new health check endpoint.
+GET {{backend_HostAddress}}/health
+Accept: application/json
