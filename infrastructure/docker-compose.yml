@@ -1,4 +1,21 @@
 services:
+  # ======== BACKEND SERVICES ========
+  backend:
+    container_name: mobile_banking_backend
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Map host port 8080 to container port 8080
+    environment:
+      # tells ASP.NET to listen on the correct port inside the container
+      - ASPNETCORE_URLS=http://+:8080
+    networks:
+      - backend-net
+    depends_on:
+      - app-db # Ensure the database is ready before starting the backend
+      - kratos
+
   app-db:
     image: mariadb:10.11
     container_name: mobile_banking_app_db
@@ -15,6 +32,25 @@ services:
       - backend-net
     restart: unless-stopped
 
+  # ======== FRONTEND SERVICES ========
+  frontend:
+    container_name: mobile_banking_frontend
+    build:
+      context: ../frontend/MobileBankingApp
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081" # Metro Bundler
+    volumes:
+      # Mount the source code so changes are reflected inside the container (for live reload)
+      - ../frontend/MobileBankingApp:/usr/src/app
+      # This prevents the container's node_modules from being overwritten by a host node_modules
+      - /usr/src/app/node_modules
+    networks:
+      - backend-net
+    depends_on:
+      - kratos # Ensure authentication service is up
+
+  # ======== AUTHENTICATION SERVICES ========
   kratos-db:
     image: mariadb:10.11
     container_name: mobile_banking_kratos_db
@@ -34,22 +70,6 @@ services:
     command:
       - '--sql_mode=NO_ENGINE_SUBSTITUTION'
 
-  kratos-migrate:
-    image: oryd/kratos:v1.1.0
-    container_name: mobile_banking_kratos_migrate
-    environment:
-      # THE ONE TRUE DSN FORMAT
-      - DSN=mysql://root:secret@tcp(kratos-db:3306)/kratos?parseTime=true&multiStatements=true
-    volumes:
-      - ./ory/kratos:/etc/config/kratos
-    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
-    networks:
-      - backend-net
-    restart: on-failure
-    depends_on:
-      kratos-db:
-        condition: service_healthy
-
   kratos:
     image: oryd/kratos:v1.1.0
     container_name: mobile_banking_kratos
@@ -57,7 +77,6 @@ services:
       - "4433:4433" # Public API
       - "4434:4434" # Admin API
     environment:
-      # THE ONE TRUE DSN FORMAT
       - DSN=mysql://root:secret@tcp(kratos-db:3306)/kratos?parseTime=true&multiStatements=true
       - LOG_LEVEL=debug
     command: serve -c /etc/config/kratos/kratos.yml --dev
@@ -67,7 +86,8 @@ services:
       - backend-net
     restart: unless-stopped
     depends_on:
-      - kratos-migrate
+      kratos-db:
+        condition: service_healthy
 
 networks:
   backend-net:
