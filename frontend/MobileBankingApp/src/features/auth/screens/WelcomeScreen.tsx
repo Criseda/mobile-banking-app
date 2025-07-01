@@ -3,9 +3,13 @@
 import React from 'react';
 import {Text, StyleSheet, Button, SafeAreaView} from 'react-native';
 import {useTheme} from '../../../styles/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../navigation/types';
 
 export const WelcomeScreen = () => {
   const {colors, isDarkMode} = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <SafeAreaView
@@ -18,9 +22,10 @@ export const WelcomeScreen = () => {
       </Text>
       <Button
         title="Login / Register"
-        onPress={() => console.log('Button pressed')}
+        onPress={() => navigation.navigate('Login')}
         color={colors.primary}
       />
+
     </SafeAreaView>
   );
 };
