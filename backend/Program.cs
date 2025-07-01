@@ -14,7 +14,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// ADD LATER in prod, messes up docker.
+// app.UseHttpsRedirection();
 
 // Our new, simple health check endpoint.
 // .WithName(...) is good practice for OpenAPI documentation.
