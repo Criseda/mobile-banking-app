@@ -46,7 +46,7 @@ services:
       # Mount the source code so changes are reflected inside the container (for live reload)
       - ../frontend/MobileBankingApp:/usr/src/app
       # This prevents the container's node_modules from being overwritten by a host node_modules
-      - /usr/src/app/node_modules
+      - frontend_node_modules:/usr/src/app/node_modules
     networks:
       - backend-net
     depends_on:
@@ -98,3 +98,4 @@ networks:
 volumes:
   app_db_data:
   kratos_db_data:
+  frontend_node_modules:
