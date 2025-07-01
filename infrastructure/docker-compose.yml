@@ -10,6 +10,8 @@ services:
     environment:
       # tells ASP.NET to listen on the correct port inside the container
       - ASPNETCORE_URLS=http://+:8080
+      # enable dev mode for development purposes (and swagger)
+      - ASPNETCORE_ENVIRONMENT=Development
     networks:
       - backend-net
     depends_on:
