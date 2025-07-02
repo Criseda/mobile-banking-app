@@ -36,7 +36,7 @@ const LoginScreen = () => {
       <View style={styles.loginButtonContainer}>
         <Button
           title="Login"
-          onPress={() => console.log('Login pressed')}
+          onPress={() => navigation.navigate('Dashboard')}
         />
       </View>
     </View>
@@ -60,7 +60,7 @@ const getStyles = (colors: ColorPalette) => StyleSheet.create({
   input: {
     height: 50,
     borderColor: colors.border,
-    borderWidth: 1,
+    borderWidth: 0,
     marginBottom: 15,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -79,6 +79,18 @@ const getStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.primary,
     marginTop: 20,
   },
+  loginButton: {
+      backgroundColor: colors.primary,
+      paddingVertical: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    loginButtonText: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
 });
 
 export default LoginScreen;

@@ -9,6 +9,10 @@ import {RootStackParamList} from './types';
 import WelcomeScreen from '../features/auth/screens/WelcomeScreen';
 import LoginScreen from '../features/auth/screens/LoginScreen';
 import RegisterScreen from '../features/auth/screens/RegisterScreen';
+import DashboardScreen from '../features/dashboard/screens/DashboardScreen';
+import TabNavigator from './TabNavigator';
+
+
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -41,6 +45,11 @@ const RootNavigator = () => {
             headerTransparent: true,
             headerTintColor: theme.colors.primary,
           }}
+        />
+        <Stack.Screen
+          name="Dashboard"
+          component={TabNavigator}
+          options={{ headerShown: false }}
         />
 
         {/* TODO: add logic here to show Auth or App screens */}
