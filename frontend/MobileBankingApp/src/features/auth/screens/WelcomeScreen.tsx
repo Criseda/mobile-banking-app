@@ -1,50 +1,73 @@
 // src/features/auth/screens/WelcomeScreen.tsx
 
 import React from 'react';
-import {Text, StyleSheet, Button, SafeAreaView} from 'react-native';
-import {useTheme} from '../../../styles/ThemeContext';
+import {
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
+import { useTheme } from '../../../styles/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
+import { ColorPalette } from '../../../styles/theme';
 
 const WelcomeScreen = () => {
-  const {colors, isDarkMode} = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { colors, isDarkMode } = useTheme();
+  const styles = getStyles(colors);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <SafeAreaView
-      style={[styles.container, {backgroundColor: colors.background}]}>
-      <Text style={[styles.title, {color: colors.text}]}>
-        Welcome to Mobile Bank
-      </Text>
-      <Text style={[styles.subtitle, {color: colors.text}]}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Welcome to Mobile Bank</Text>
+      <Text style={styles.subtitle}>
         Current Mode: {isDarkMode ? 'Dark' : 'Light'}
       </Text>
-      <Button
-        title="Login / Register"
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate('Login')}
-        color={colors.primary}
-      />
-
+      >
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 32,
-  },
-});
+const getStyles = (colors: ColorPalette) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      paddingHorizontal: 20,
+      backgroundColor: colors.background,
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      marginBottom: 8,
+      color: colors.text,
+      textAlign: 'center',
+    },
+    subtitle: {
+      fontSize: 16,
+      marginBottom: 32,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+    button: {
+      backgroundColor: colors.primary,
+      paddingVertical: 15,
+      paddingHorizontal: 40,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: '#FFFFFF',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+  });
 
 export default WelcomeScreen;
