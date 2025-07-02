@@ -26,7 +26,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: '',
+            headerTransparent: true,
+            headerTintColor: theme.colors.primary,
+          }}
         />
 
         {/* TODO: add logic here to show Auth or App screens */}
