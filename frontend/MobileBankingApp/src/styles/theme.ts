@@ -6,6 +6,7 @@ const colorsLight = {
   background: '#F2F2F7',  // A slightly off-white background
   card: '#FFFFFF',         // White for card-like elements
   text: '#1C1C1E',         // Almost black for text
+  textSecondary: '#8E8E93', // A secondary, less prominent text color
   border: '#C6C6C8',      // A light grey for borders
   notification: '#FF453A', // A red for notification badges
   success: '#30D158',      // A green for success states
@@ -16,6 +17,7 @@ const colorsDark = {
   background: '#000000',  // Pure black for OLED screens
   card: '#1C1C1E',         // A very dark grey for cards
   text: '#F2F2F7',         // Almost white for text
+  textSecondary: '#8E8E93', // A secondary, less prominent text color
   border: '#38383A',      // A dark grey for borders
   notification: '#FF453A',
   success: '#30D158',
