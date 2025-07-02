@@ -53,7 +53,11 @@ const SplashScreen = () => {
         backgroundColor={colors.background}
       />
       <Image
-        source={require('../../../assets/images/techventures-logo-dark.png')}
+        source={
+          isDarkMode
+            ? require('../../../assets/images/techventures-logo-light.png')
+            : require('../../../assets/images/techventures-logo-dark.png')
+        }
         style={styles.logo}
         resizeMode="contain"
       />
