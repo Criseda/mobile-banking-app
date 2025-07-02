@@ -1,11 +1,11 @@
 // src/navigation/index.tsx
 
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {useTheme} from '../styles/ThemeContext';
-import {RootStackParamList} from './types';
+import { useTheme } from '../styles/ThemeContext';
+import { RootStackParamList } from './types';
 import WelcomeScreen from '../features/auth/screens/WelcomeScreen';
 import LoginScreen from '../features/auth/screens/LoginScreen';
 import RegisterScreen from '../features/auth/screens/RegisterScreen';
@@ -14,19 +14,25 @@ import TabNavigator from './TabNavigator';
 
 
 
+import SplashScreen from '../features/common/screens/SplashScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName='Splash'>
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Login"
