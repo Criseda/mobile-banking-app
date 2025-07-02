@@ -8,6 +8,7 @@ import {useTheme} from '../styles/ThemeContext';
 import {RootStackParamList} from './types';
 import {WelcomeScreen} from '../features/auth/screens/WelcomeScreen';
 import LoginScreen from '../features/auth/screens/LoginScreen';
+import RegisterScreen from '../features/auth/screens/RegisterScreen';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -26,6 +27,15 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          options={{
+            headerTitle: '',
+            headerTransparent: true,
+            headerTintColor: theme.colors.primary,
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
           options={{
             headerTitle: '',
             headerTransparent: true,
