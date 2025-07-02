@@ -1,11 +1,15 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { ColorPalette } from '../../../styles/theme';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../navigation/types';
 
 const LoginScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.container}>
@@ -21,11 +25,20 @@ const LoginScreen = () => {
         placeholderTextColor={colors.border}
         secureTextEntry
       />
-      <Button
-        title="Login"
-        onPress={() => console.log('Login pressed')}
-        color={colors.primary}
-      />
+      <TouchableOpacity
+        style={styles.registerButton}
+        onPress={() => navigation.navigate('Register')}
+      >
+        <Text style={styles.registerButtonText}>
+          Don't have an account? <Text style={styles.registerText}>Register</Text>
+        </Text>
+      </TouchableOpacity>
+      <View style={styles.loginButtonContainer}>
+        <Button
+          title="Login"
+          onPress={() => console.log('Login pressed')}
+        />
+      </View>
     </View>
   );
 };
@@ -52,6 +65,19 @@ const getStyles = (colors: ColorPalette) => StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     color: colors.text,
+  },
+  registerButton: {
+    alignItems: 'center',
+  },
+  registerButtonText: {
+    color: colors.textSecondary,
+  },
+  registerText: {
+    color: colors.text,
+  },
+  loginButtonContainer: {
+    color: colors.primary,
+    marginTop: 20,
   },
 });
 
