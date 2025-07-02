@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {useTheme} from '../styles/ThemeContext';
 import {RootStackParamList} from './types';
-import {WelcomeScreen} from '../features/auth/screens/WelcomeScreen';
+import WelcomeScreen from '../features/auth/screens/WelcomeScreen';
 import LoginScreen from '../features/auth/screens/LoginScreen';
 import RegisterScreen from '../features/auth/screens/RegisterScreen';
 
