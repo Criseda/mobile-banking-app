@@ -1,6 +1,6 @@
-import React, {createContext, useContext} from 'react';
-import {useColorScheme} from 'react-native';
-import {AppLightTheme, AppDarkTheme, ColorPalette} from './theme';
+import React, { createContext, useContext } from 'react';
+import { useColorScheme } from 'react-native';
+import { AppLightTheme, AppDarkTheme, ColorPalette } from './theme';
 
 // Define the shape of our context
 interface ThemeContextType {
@@ -13,7 +13,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 // Create the provider component
-export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
 
