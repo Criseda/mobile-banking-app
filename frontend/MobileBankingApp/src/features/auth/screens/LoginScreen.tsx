@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,18 +6,51 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { ColorPalette } from '../../../styles/theme';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
+import { useAuth } from '../../../context/AuthContext';
+import { initLoginFlow, submitLogin } from '../../../api/kratosApi';
 
 const LoginScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { login } = useAuth();
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Initialize login flow
+      const loginFlow = await initLoginFlow();
+      
+      // Submit login
+      const response = await submitLogin(loginFlow.id, email, password);
+      
+      // Save session
+      await login(response.session, response.session_token);
+      
+      // Navigate to dashboard
+      navigation.navigate('Dashboard');
+    } catch (error) {
+      Alert.alert('Login Failed', 'Invalid email or password');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,13 +58,19 @@ const LoginScreen = () => {
         <Text style={styles.title}>Login</Text>
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          placeholderTextColor={colors.text}
+          placeholder="Email"
+          placeholderTextColor={colors.textSecondary}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor={colors.text}
+          placeholderTextColor={colors.textSecondary}
+          value={password}
+          onChangeText={setPassword}
           secureTextEntry
         />
         <TouchableOpacity
@@ -44,10 +83,13 @@ const LoginScreen = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => navigation.navigate('Dashboard')}
+          style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+          onPress={handleLogin}
+          disabled={isLoading}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -101,6 +143,9 @@ const getStyles = (colors: ColorPalette) =>
       color: '#FFFFFF',
       fontSize: 16,
       fontWeight: 'bold',
+    },
+    loginButtonDisabled: {
+      opacity: 0.6,
     },
   });
 
