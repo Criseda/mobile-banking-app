@@ -9,10 +9,7 @@ import { RootStackParamList } from './types';
 import WelcomeScreen from '../features/auth/screens/WelcomeScreen';
 import LoginScreen from '../features/auth/screens/LoginScreen';
 import RegisterScreen from '../features/auth/screens/RegisterScreen';
-import DashboardScreen from '../features/dashboard/screens/DashboardScreen';
 import TabNavigator from './TabNavigator';
-
-
 
 import SplashScreen from '../features/common/screens/SplashScreen';
 
@@ -23,7 +20,7 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName='Splash'>
+      <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"
           component={SplashScreen}

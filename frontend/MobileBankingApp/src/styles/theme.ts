@@ -1,24 +1,24 @@
-import {DefaultTheme, DarkTheme} from '@react-navigation/native';
+import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 // TODO: Schimbate culorile sa fie apropriate de specificatia de design
 const colorsLight = {
-  primary: '#5f9df0',      // A bright blue for interactive elements
-  background: '#F2F2F7',  // A slightly off-white background
-  card: '#FFFFFF',         // White for card-like elements
-  text: '#1C1C1E',         // Almost black for text
-  textSecondary: '#8E8E93', // A secondary, less prominent text color
-  border: '#C6C6C8',      // A light grey for borders
-  notification: '#FF453A', // A red for notification badges
-  success: '#30D158',      // A green for success states
+  primary: '#5f9df0',
+  background: '#F2F2F7',
+  card: '#FFFFFF',
+  text: '#1C1C1E',
+  textSecondary: '#8E8E93',
+  border: '#C6C6C8',
+  notification: '#FF453A',
+  success: '#30D158',
 };
 
 const colorsDark = {
-  primary: '#5f9df0',      // Blue can often stay the same
-  background: '#181b26',  // Pure black for OLED screens
-  card: '#29304a',         // A very dark grey for cards
-  text: '#F2F2F7',         // Almost white for text
-  textSecondary: '#8E8E93', // A secondary, less prominent text color
-  border: '#38383A',      // A dark grey for borders
+  primary: '#5f9df0',
+  background: '#181b26',
+  card: '#29304a',
+  text: '#F2F2F7',
+  textSecondary: '#8E8E93',
+  border: '#38383A',
   notification: '#FF453A',
   success: '#30D158',
 };
@@ -29,7 +29,7 @@ export const AppLightTheme = {
   colors: {
     ...DefaultTheme.colors,
     ...colorsLight,
-      },
+  },
 };
 
 export const AppDarkTheme = {
@@ -38,7 +38,7 @@ export const AppDarkTheme = {
   colors: {
     ...DarkTheme.colors,
     ...colorsDark,
-      },
+  },
 };
 
 // type definition for our color palette
