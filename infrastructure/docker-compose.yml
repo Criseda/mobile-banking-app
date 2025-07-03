@@ -80,8 +80,21 @@ services:
     command:
       - '--sql_mode=NO_ENGINE_SUBSTITUTION'
 
+  kratos-migrate:
+    image: oryd/kratos:v1.2.0
+    environment:
+      - DSN=mysql://root:secret@tcp(kratos-db:3306)/kratos?parseTime=true&multiStatements=true
+    command: migrate sql -e --yes
+    volumes:
+      - ./ory:/etc/config/kratos
+    networks:
+      - backend-net
+    depends_on:
+      kratos-db:
+        condition: service_healthy
+
   kratos:
-    image: oryd/kratos:v1.1.0
+    image: oryd/kratos:v1.2.0
     container_name: mobile_banking_kratos
     ports:
       - "4433:4433" # Public API
@@ -91,7 +104,7 @@ services:
       - LOG_LEVEL=debug
     command: serve -c /etc/config/kratos/kratos.yml --dev
     volumes:
-      - ./ory/kratos:/etc/config/kratos
+      - ./ory:/etc/config/kratos
     networks:
       - backend-net
     restart: unless-stopped

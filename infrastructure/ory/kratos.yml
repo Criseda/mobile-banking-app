@@ -1,0 +1,43 @@
+version: v1.2.0
+
+dsn: mysql://root:secret@kratos-db:3306/kratos?parseTime=true&multiStatements=true
+
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        # - http://localhost:8081 # For React Native Metro bundler
+        - http://localhost* # Allow all localhost subdomains
+  admin:
+    base_url: http://kratos:4434
+
+selfservice:
+  default_browser_return_url: http://localhost:8081/
+  methods:
+    password:
+      enabled: true
+      config:
+        min_password_length: 6
+        haveibeenpwned_enabled: false
+  flows:
+    settings:
+      privileged_session_max_age: 15m
+      required_aal: highest_available
+
+log:
+  format: text
+  leak_sensitive_values: true
+  level: info
+
+secrets:
+  cookie:
+    - abcdefghijklmnopqrstuvwxyz123456  # Must be exactly 32 characters
+  cipher:
+    - abcdefghijklmnopqrstuvwxyz123456  # Must be exactly 32 characters
+
+identity:
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
