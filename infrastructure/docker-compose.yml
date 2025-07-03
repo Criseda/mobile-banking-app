@@ -15,8 +15,11 @@ services:
     networks:
       - backend-net
     depends_on:
-      - app-db # Ensure the database is ready before starting the backend
-      - kratos
+      app-db:
+        condition: service_healthy
+      kratos:
+        condition: service_started
+
 
   app-db:
     image: mariadb:10.11
@@ -32,7 +35,12 @@ services:
       - app_db_data:/var/lib/mysql
     networks:
       - backend-net
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   # ======== FRONTEND SERVICES ========
   frontend:
