@@ -75,6 +75,7 @@ const getStyles = (colors: ColorPalette) =>
     container: {
       flex: 1,
       paddingHorizontal: 20,
+      paddingTop: 20,
     },
     header: {
       fontSize: 26,
