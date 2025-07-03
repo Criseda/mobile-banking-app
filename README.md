@@ -141,6 +141,28 @@ The app will launch in the simulator and automatically connect to the Metro serv
 
 ---
 
+## 🌐 Service Endpoints
+
+When all services are running, the following endpoints are available:
+
+| Service | Port | URL | Description |
+|---------|------|-----|-------------|
+| **Backend API** | 8080 | `http://localhost:8080` | ASP.NET Core REST API |
+| **Database Test** | 8080 | `http://localhost:8080/db-test` | Database connection verification |
+| **API Documentation** | 8080 | `http://localhost:8080/swagger` | Swagger UI (Development only) |
+| **Frontend Metro** | 8081 | `http://localhost:8081` | React Native Metro bundler |
+| **Database (MariaDB)** | 3307 | `localhost:3307` | Direct database access |
+| **Kratos Public API** | 4433 | `http://localhost:4433` | Authentication flows (login/register) |
+| **Kratos Admin API** | 4434 | `http://localhost:4434` | Identity management |
+
+### Health Check Endpoints
+
+* **Backend Health**: `http://localhost:8080/health`
+* **Kratos Public Health**: `http://localhost:4433/health/ready`
+* **Kratos Admin Health**: `http://localhost:4434/admin/health/ready`
+
+---
+
 ## 🔧 Development Commands
 
 ### Backend Development
