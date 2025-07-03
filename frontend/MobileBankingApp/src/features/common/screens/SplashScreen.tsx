@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import {
-  View,
   StyleSheet,
   Image,
   ActivityIndicator,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -47,7 +47,9 @@ const SplashScreen = () => {
   }, [navigation]);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={colors.background}
@@ -62,7 +64,7 @@ const SplashScreen = () => {
         resizeMode="contain"
       />
       <ActivityIndicator size="large" style={styles.spinner} />
-    </View>
+    </SafeAreaView>
   );
 };
 

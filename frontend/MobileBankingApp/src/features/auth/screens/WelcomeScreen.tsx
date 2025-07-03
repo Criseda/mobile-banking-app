@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
@@ -20,28 +21,33 @@ const WelcomeScreen = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Welcome to Mobile Bank</Text>
-      <Text style={styles.subtitle}>
-        Current Mode: {isDarkMode ? 'Dark' : 'Light'}
-      </Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Login')}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Welcome to Mobile Bank</Text>
+        <Text style={styles.subtitle}>
+          Current Mode: {isDarkMode ? 'Dark' : 'Light'}
+        </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
 const getStyles = (colors: ColorPalette) =>
   StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
     container: {
       flex: 1,
       justifyContent: 'center',
       paddingHorizontal: 20,
-      backgroundColor: colors.background,
     },
     title: {
       fontSize: 28,
@@ -59,7 +65,6 @@ const getStyles = (colors: ColorPalette) =>
     button: {
       backgroundColor: colors.primary,
       paddingVertical: 15,
-      paddingHorizontal: 40,
       borderRadius: 10,
       alignItems: 'center',
     },
