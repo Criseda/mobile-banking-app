@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ColorPalette } from '../styles/theme';
+import { ColorPalette } from '../../styles/theme';
 
 interface Props {
   title: string;
@@ -13,14 +13,12 @@ const ExpandableSection = ({ title, children, colors }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <View style={{ marginBottom: 12 }}>
+    <View style={styles.container}>
       <TouchableOpacity
         style={[styles.header, { borderBottomColor: colors.border }]}
         onPress={() => setExpanded(!expanded)}
       >
-        <Text style={[styles.headerText, { color: colors.text }]}>
-          {title}
-        </Text>
+        <Text style={[styles.headerText, { color: colors.text }]}>{title}</Text>
         <Ionicons
           name={expanded ? 'chevron-up' : 'chevron-down'}
           size={20}
@@ -28,16 +26,15 @@ const ExpandableSection = ({ title, children, colors }: Props) => {
         />
       </TouchableOpacity>
 
-      {expanded && (
-        <View style={styles.content}>
-          {children}
-        </View>
-      )}
+      {expanded && <View style={styles.content}>{children}</View>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 12,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

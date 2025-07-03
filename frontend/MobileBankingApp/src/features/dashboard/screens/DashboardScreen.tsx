@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { ColorPalette } from '../../../styles/theme';
-import ExpandableSection from '../../../components/ExpandableSection';
+import ExpandableSection from '../../../components/common/ExpandableSection';
 
 const DashboardScreen = () => {
   const { colors } = useTheme();
