@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  Switch,
 } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { ColorPalette } from '../../../styles/theme';
@@ -16,7 +17,13 @@ import ExpandableSection from '../../../components/common/ExpandableSection';
 const DashboardScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
-  const { user, logout } = useAuth();
+  const {
+    user,
+    logout,
+    enableBiometric,
+    disableBiometric,
+    isBiometricEnabled,
+  } = useAuth();
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
@@ -32,6 +39,40 @@ const DashboardScreen = () => {
         },
       },
     ]);
+  };
+
+  const handleBiometricToggle = async () => {
+    if (isBiometricEnabled) {
+      Alert.alert(
+        'Disable Biometric',
+        'Are you sure you want to disable biometric authentication?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Disable',
+            style: 'destructive',
+            onPress: async () => {
+              await disableBiometric();
+            },
+          },
+        ],
+      );
+    } else {
+      Alert.alert(
+        'Enable Biometric',
+        'Use Face ID or Touch ID to quickly and securely access your banking app?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Enable',
+            onPress: async () => {
+              await enableBiometric();
+              Alert.alert('Success', 'Biometric authentication enabled!');
+            },
+          },
+        ],
+      );
+    }
   };
 
   return (
@@ -52,6 +93,22 @@ const DashboardScreen = () => {
           <Text style={styles.balanceLabel}>Sold disponibil</Text>
           <Text style={styles.balanceValue}>20.000,00 RON</Text>
           <Text style={styles.balanceValue}>5.000,00 EUR</Text>
+        </View>
+
+        {/* Biometric Settings */}
+        <View style={styles.settingsContainer}>
+          <View style={styles.settingRow}>
+            <Text style={styles.settingLabel}>Biometric Authentication</Text>
+            <Switch
+              value={isBiometricEnabled}
+              onValueChange={handleBiometricToggle}
+              trackColor={{ false: colors.textSecondary, true: colors.primary }}
+              thumbColor={isBiometricEnabled ? '#FFFFFF' : '#f4f3f4'}
+            />
+          </View>
+          <Text style={styles.settingDescription}>
+            Use Face ID or Touch ID to quickly access your banking app
+          </Text>
         </View>
 
         <ExpandableSection title="Conturi Curente" colors={colors}>
@@ -146,6 +203,27 @@ const getStyles = (colors: ColorPalette) =>
       fontSize: 18,
       fontWeight: 'bold',
       color: colors.primary,
+    },
+    settingsContainer: {
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      padding: 16,
+      marginBottom: 16,
+    },
+    settingRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    settingLabel: {
+      fontSize: 16,
+      color: colors.text,
+      fontWeight: '500',
+    },
+    settingDescription: {
+      fontSize: 12,
+      color: colors.textSecondary,
     },
     sectionTitle: {
       marginTop: 24,
