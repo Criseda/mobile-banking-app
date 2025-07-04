@@ -1,4 +1,13 @@
-const KRATOS_PUBLIC_URL = 'http://localhost:4433';
+import { Platform } from 'react-native';
+
+const getBaseUrl = () => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:4433'; // Special IP for Android Emulator
+  }
+  return 'http://localhost:4433'; // iOS can use localhost
+};
+
+const KRATOS_PUBLIC_URL = getBaseUrl();
 
 // Simplified fetch configuration
 const fetchConfig = {

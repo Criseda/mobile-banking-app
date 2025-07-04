@@ -4,12 +4,13 @@ dsn: mysql://root:secret@kratos-db:3306/kratos?parseTime=true&multiStatements=tr
 
 serve:
   public:
-    base_url: http://127.0.0.1:4433/
+    base_url: http://0.0.0.0:4433/  # Listen on all interfaces
     cors:
       enabled: true
       allowed_origins:
-        # - http://localhost:8081 # For React Native Metro bundler
-        - http://localhost* # Allow all localhost subdomains
+        - http://localhost*
+        - http://10.0.2.2*     # Android emulator
+        - http://192.168.*     # Local network
   admin:
     base_url: http://kratos:4434
 
