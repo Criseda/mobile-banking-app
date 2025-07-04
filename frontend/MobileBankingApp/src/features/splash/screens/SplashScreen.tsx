@@ -10,41 +10,30 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
 import { useTheme } from '../../../styles/ThemeContext';
+import { useAuth } from '../../../context/AuthContext';
 
 type SplashScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Splash'
 >;
 
-// --- Mock function to simulate checking auth status ---
-// In a real app, this would check AsyncStorage for a token
-const checkAuthStatus = async (): Promise<boolean> => {
-  // Simulate a network request or async operation
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  // For now, we'll assume the user is not logged in.
-  // Later replace this with real logic.
-  return false;
-};
-// ----------------------------------------------------
-
 const SplashScreen = () => {
   const navigation = useNavigation<SplashScreenNavigationProp>();
   const { colors, isDarkMode } = useTheme();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    const initializeApp = async () => {
-      const isLoggedIn = await checkAuthStatus();
-
-      if (isLoggedIn) {
-        // Check for FaceID or TouchID or PIN to refresh token
-        // For now, we will always navigate to Welcome
+    // Wait for auth context to finish loading
+    if (!isLoading) {
+      if (user) {
+        // User is logged in, go to dashboard
+        navigation.replace('Dashboard');
       } else {
+        // User is not logged in, go to welcome
         navigation.replace('Welcome');
       }
-    };
-
-    initializeApp();
-  }, [navigation]);
+    }
+  }, [isLoading, user, navigation]);
 
   return (
     <SafeAreaView

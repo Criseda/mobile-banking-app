@@ -14,14 +14,20 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
 import { useAuth } from '../../../context/AuthContext';
-import { initRegistrationFlow, submitRegistration, initLoginFlow, submitLogin } from '../../../api/kratosApi';
+import {
+  initRegistrationFlow,
+  submitRegistration,
+  initLoginFlow,
+  submitLogin,
+} from '../../../api/kratosApi';
 
 const RegisterScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { login } = useAuth();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -54,36 +60,21 @@ const RegisterScreen = () => {
     try {
       // Step 1: Initialize registration flow
       const registrationFlow = await initRegistrationFlow();
-      
+
       // Step 2: Submit registration
-      await submitRegistration(
-        registrationFlow.id, 
-        email, 
-        password
-      );
+      await submitRegistration(registrationFlow.id, email, password);
 
       // Step 3: Auto-login after successful registration
       const loginFlow = await initLoginFlow();
       const loginResponse = await submitLogin(loginFlow.id, email, password);
-      
-      // Step 4: Save session and navigate
+
+      // Step 4: Save session - AuthContext will handle navigation automatically
       await login(loginResponse.session, loginResponse.session_token);
-      
-      Alert.alert(
-        'Success!', 
-        'Account created successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('Dashboard')
-          }
-        ]
-      );
     } catch (error) {
       console.error('Registration error:', error);
       Alert.alert(
-        'Registration Failed', 
-        'This email may already be registered or there was a server error. Please try again.'
+        'Registration Failed',
+        'This email may already be registered or there was a server error. Please try again.',
       );
     } finally {
       setIsLoading(false);
@@ -94,7 +85,7 @@ const RegisterScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Create Account</Text>
-        
+
         <TextInput
           style={styles.input}
           placeholder="Email Address"
@@ -105,7 +96,7 @@ const RegisterScreen = () => {
           autoCapitalize="none"
           autoComplete="email"
         />
-        
+
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -115,7 +106,7 @@ const RegisterScreen = () => {
           secureTextEntry
           autoComplete="new-password"
         />
-        
+
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
@@ -125,9 +116,12 @@ const RegisterScreen = () => {
           secureTextEntry
           autoComplete="new-password"
         />
-        
+
         <TouchableOpacity
-          style={[styles.registerButton, isLoading && styles.registerButtonDisabled]}
+          style={[
+            styles.registerButton,
+            isLoading && styles.registerButtonDisabled,
+          ]}
           onPress={handleRegister}
           disabled={isLoading}
         >
@@ -135,7 +129,7 @@ const RegisterScreen = () => {
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={styles.loginLink}
           onPress={() => navigation.navigate('Login')}

@@ -19,9 +19,10 @@ import { initLoginFlow, submitLogin } from '../../../api/kratosApi';
 const LoginScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { login } = useAuth();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,15 +37,12 @@ const LoginScreen = () => {
     try {
       // Initialize login flow
       const loginFlow = await initLoginFlow();
-      
+
       // Submit login
       const response = await submitLogin(loginFlow.id, email, password);
-      
-      // Save session
+
+      // Save session - AuthContext will handle navigation automatically
       await login(response.session, response.session_token);
-      
-      // Navigate to dashboard
-      navigation.navigate('Dashboard');
     } catch (error) {
       Alert.alert('Login Failed', 'Invalid email or password');
     } finally {

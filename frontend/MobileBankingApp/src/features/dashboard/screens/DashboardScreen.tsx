@@ -6,19 +6,47 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { useTheme } from '../../../styles/ThemeContext';
 import { ColorPalette } from '../../../styles/theme';
+import { useAuth } from '../../../context/AuthContext';
 import ExpandableSection from '../../../components/common/ExpandableSection';
 
 const DashboardScreen = () => {
   const { colors } = useTheme();
   const styles = getStyles(colors);
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          await logout();
+        },
+      },
+    ]);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>Acasa</Text>
+        {/* Header with user info and logout */}
+        <View style={styles.headerContainer}>
+          <View>
+            <Text style={styles.header}>Acasa</Text>
+            <Text style={styles.userEmail}>{user?.identity.traits.email}</Text>
+          </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceLabel}>Sold disponibil</Text>
@@ -77,12 +105,32 @@ const getStyles = (colors: ColorPalette) =>
       paddingHorizontal: 20,
       paddingTop: 20,
     },
+    headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 16,
+    },
     header: {
       fontSize: 26,
       fontWeight: 'bold',
       color: colors.text,
-      marginBottom: 16,
-      textAlign: 'center',
+    },
+    userEmail: {
+      fontSize: 12,
+      color: colors.textSecondary,
+      marginTop: 2,
+    },
+    logoutButton: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 6,
+    },
+    logoutButtonText: {
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: 'bold',
     },
     balanceContainer: {
       backgroundColor: colors.card,
